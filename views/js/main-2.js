@@ -402,7 +402,7 @@ var resizePizzas = function (size) {
     window.performance.mark("mark_start_resize"); // User Timing API function
 
     // Changes the value for the size of the pizza above the slider
-    function changeSliderLabel(size) {
+function changeSliderLabel(size) {
         switch (size) {
             case "1":
                 document.querySelector("#pizzaSize").innerHTML = "Small";
@@ -440,17 +440,17 @@ var resizePizzas = function (size) {
           default:
             console.log("bug in changePizzaSizes");
     }
-    changePizzaSizes(size); //moved up on 6/7 from line 489 in main file
+  //  changePizzaSizes(size); //moved up on 6/7 from line 489 in main file
+
 
     var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
-
-       //Per reviewer's suggestion, it's more efficient to create var for array length, so that
-       //array's length property is not accessed to check its value at each iteration
-       for (var i = 0, len = randomPizzas.length; i < len; i++) {
-         randomPizzas[i].style.width = newWidth + "%";
+   //for (var i = 0, len = randomPizzas.length; i < len; i++) {
+    for (var i = 0; i <randomPizzas.length; i++) {
+        randomPizzas[i].style.width = newWidth + "%";
+        // randomPizzas[i].style.width = changePizzaSizes(size) + "%";
        }
    }
-
+ changePizzaSizes(size);
    // Changes the slider value to a percent width
   /*     function sizeSwitcher (size) {
          switch(size) {
@@ -472,6 +472,8 @@ var resizePizzas = function (size) {
   //   }
 
 
+
+
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
   window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
@@ -479,18 +481,30 @@ var resizePizzas = function (size) {
   console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
 
+
+
 window.performance.mark("mark_start_generating"); // collect timing data
 
+
+
 // This for-loop actually creates and appends all of the pizzas when the page loads
+ var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
+ // var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
+
+
+
+
 // User Timing API again. These measurements tell you how long it took to generate the initial pizzas
 window.performance.mark("mark_end_generating");
 window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
 var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
 console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
+
+
+
 
 
 // Iterator for number of times the pizzas in the background have scrolled.
@@ -514,16 +528,16 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.getElementsByClassName("mover");
-     //Moved the variables outside of the for loop
+  var items = document.getElementsByClassName("mover");  //Moved the variables outside of the for loop
      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
      for (var i = 0; i < items.length; i++) {
-         // document.body.scrollTop is no longer supported in Chrome.
-
-         var phase = Math.sin((scrollTop / 1250) + (i % 5));
+        var phase = Math.sin((scrollTop / 1250) + (i % 5));
          items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
      }
+
+
+
+
 
 
      // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -537,12 +551,10 @@ function updatePositions() {
      }
 
      // runs updatePositions on scroll
-     window.addEventListener('scroll', updatePositions);
+     window.addEventListener('scroll', updatePositions);    // runs updatePositions on scroll
 
 
-
-     // Generates the sliding pizzas when the page loads.
-     document.addEventListener('DOMContentLoaded', function() {
+     document.addEventListener('DOMContentLoaded', function() {   // Generates the sliding pizzas when the page loads.
        var cols = 8;
        var s = 256;
 
